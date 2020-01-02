@@ -1,0 +1,17 @@
+#!/bin/bash 
+
+#user_list file - the output of symp -k user list
+
+
+
+symp -k -u admin -p admin -d cloud_admin -r default role-assignments list -c role -c user -c scope |awk -F "'" '{print $4, " " ,$8, " ", $10," ", $14}' > role_user_scope_sorted
+ 
+cat role_user_scope_sorted |grep '[a-z][0-9]'| while read line
+do
+ user_id=$(echo $line |awk '{print $2}')
+ user_name=$(cat user_list |grep $user_id  |awk -F "|" '{print $3}')
+
+ echo $line $user_name
+done 
+
+
